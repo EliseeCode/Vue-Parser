@@ -50,13 +50,17 @@ class BeautifulSoupHTMLParser(HTMLParser):
     def handle_starttag(self, name, attrs):
         # XXX namespace
         attr_dict = {}
+        index=0
         for key, value in attrs:
             print(key,value)
             # Change None attribute values to the empty string
             # for consistency with the other tree builders.
             # if value is None:
                 # value = ''
-            attr_dict[key] = value
+                
+            attr_dict[key] = {"index":index,"value":value}
+            index+=1
+            # attr_dict[key] = value
             attrvalue = '""'
         self.soup.handle_starttag(name, None, None, attr_dict)
 

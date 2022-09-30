@@ -758,12 +758,13 @@ class Tag(PageElement):
         self.namespace = namespace
         self.prefix = prefix
         if attrs is None:
-            attrs = {}
+            attrs = {}    
         elif attrs and builder.cdata_list_attributes:
             attrs = builder._replace_cdata_list_attribute_values(
                 self.name, attrs)
         else:
             attrs = dict(attrs)
+            
         self.attrs = attrs
         self.contents = []
         self.setup(parent, previous)
@@ -891,7 +892,7 @@ class Tag(PageElement):
         """Returns the value of the 'key' attribute for the tag, or
         the value given for 'default' if it doesn't have that
         attribute."""
-        return self.attrs.get(key, default)
+        return self.attrs.get(key, default)["value"]
 
     def has_attr(self, key):
         return key in self.attrs
@@ -902,7 +903,7 @@ class Tag(PageElement):
     def __getitem__(self, key):
         """tag[key] returns the value of the 'key' attribute for the tag,
         and throws an exception if it's not there."""
-        return self.attrs[key]
+        return self.attrs[key]["value"]
 
     def __iter__(self):
         "Iterating over a tag iterates over its contents."
@@ -922,7 +923,7 @@ class Tag(PageElement):
     def __setitem__(self, key, value):
         """Setting tag[key] sets the value of the 'key' attribute for the
         tag."""
-        self.attrs[key] = value
+        self.attrs[key]["value"] = value
 
     def __delitem__(self, key):
         "Deleting tag[key] deletes all 'key' attributes for the tag."
@@ -1020,6 +1021,7 @@ class Tag(PageElement):
         attrs = []
         if self.attrs:
             for key, val in sorted(self.attrs.items()):
+                # val=["value"]
                 if val is None:
                     decoded = key
                 else:
