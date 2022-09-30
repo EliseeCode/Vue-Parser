@@ -71,11 +71,11 @@ class EntitySubstitution(object):
      CHARACTER_TO_HTML_ENTITY_RE) = _populate_class_variables()
 
     CHARACTER_TO_XML_ENTITY = {
-        "'": "apos",
-        '"': "quot",
-        "&": "amp",
-        "<": "lt",
-        ">": "gt",
+        "'": "'",
+        '"': '"',
+        "&": "&",
+        "<": "<",
+        ">": ">",
         }
 
     BARE_AMPERSAND_OR_BRACKET = re.compile("([<>]|"
@@ -94,7 +94,7 @@ class EntitySubstitution(object):
         """Used with a regular expression to substitute the
         appropriate XML entity for an XML special character."""
         entity = cls.CHARACTER_TO_XML_ENTITY[matchobj.group(0)]
-        return "&%s;" % entity
+        return "%s" % entity
 
     @classmethod
     def quoted_attribute_value(self, value):

@@ -183,7 +183,7 @@ class PageElement(object):
                 name, EntitySubstitution.substitute_xml)
         else:
             return self.HTML_FORMATTERS.get(
-                name, HTMLAwareEntitySubstitution.substitute_xml)
+                name, HTMLAwareEntitySubstitution.substitute_html)
 
     def setup(self, parent=None, previous_element=None):
         """Sets up the initial relations between this element and
@@ -738,7 +738,6 @@ class Doctype(PreformattedString):
     SUFFIX = u'>\n'
 
 def sorter(elem):
-    print(elem[1])
     return elem[1]['index']
 
 class Tag(PageElement):
@@ -796,8 +795,8 @@ class Tag(PageElement):
 
         If the builder has no designated list of empty-element tags,
         then any tag with no contents is an empty-element tag.
-        """
-        return len(self.contents) == 0 and self.can_be_empty_element
+        """ 
+        return len(self.contents) == 0 and (self.can_be_empty_element or "-" in self.name)
     isSelfClosing = is_empty_element  # BS3
 
     @property
@@ -895,6 +894,7 @@ class Tag(PageElement):
         """Returns the value of the 'key' attribute for the tag, or
         the value given for 'default' if it doesn't have that
         attribute."""
+        # print(self.attrs.get(key, default)["value"])
         return self.attrs.get(key, default)["value"]
 
     def has_attr(self, key):
@@ -906,6 +906,7 @@ class Tag(PageElement):
     def __getitem__(self, key):
         """tag[key] returns the value of the 'key' attribute for the tag,
         and throws an exception if it's not there."""
+        # print(self.attrs[key]["value"])
         return self.attrs[key]["value"]
 
     def __iter__(self):
@@ -926,7 +927,13 @@ class Tag(PageElement):
     def __setitem__(self, key, value):
         """Setting tag[key] sets the value of the 'key' attribute for the
         tag."""
-        self.attrs[key]["value"] = value
+        indexMax=0
+        for k in self.attrs:
+            val=self.attrs[k]
+            if indexMax<val['index']:
+                indexMax=val['index']
+        indexMax=indexMax+1
+        self.attrs[key]= {'value':value,'index':indexMax+1}
 
     def __delitem__(self, key):
         "Deleting tag[key] deletes all 'key' attributes for the tag."
@@ -1023,8 +1030,8 @@ class Tag(PageElement):
 
         attrs = []
         if self.attrs:
-            print("As it is",self.attrs.items())
-            print("sorted",sorted(self.attrs.items(),key=sorter))
+            # print("As it is",self.attrs.items())
+            # print("sorted",sorted(self.attrs.items(),key=sorter))
                 
             for key, indexedVal in sorted(self.attrs.items(),key=sorter):
                 
@@ -1054,7 +1061,7 @@ class Tag(PageElement):
             prefix = self.prefix + ":"
 
         if self.is_empty_element:
-            close = '/'
+            close = ' /'
         else:
             closeTag = '</%s%s>' % (prefix, self.name)
 
@@ -1148,7 +1155,7 @@ class Tag(PageElement):
         formatter="minimal"):
         """Renders the contents of this tag as a bytestring."""
         contents = self.decode_contents(indent_level, encoding, formatter)
-        return contents.encode(encoding)
+        return contents #.encode(encoding)
 
     # Old method for BS3 compatibility
     def renderContents(self, encoding=DEFAULT_OUTPUT_ENCODING,

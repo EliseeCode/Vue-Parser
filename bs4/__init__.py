@@ -331,7 +331,6 @@ class BeautifulSoup(Tag):
         """
 
         # print "Start tag %s: %s" % (name, attrs)
-        print(attrs)
         self.endData()
 
         if (self.parse_only and len(self.tagStack) <= 1

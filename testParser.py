@@ -13,8 +13,8 @@ def printAttr(elements):
     return attrList
 
 def changeElement(soup):
-        return soup
-        elements=soup.findAll('input-number')
+        # return soup
+        elements=soup.findAll('div')
         
         for element in elements :
             element.name = 'input-number'
@@ -121,17 +121,17 @@ def changeElement(soup):
                 del element["@keyup.native.down"]
         script=soup.find('script')
 
-        if len(script.findAll(text="import InputNumber"))==0:
-            script.string = "import InputNumber from '@eturnity/eturnity_reusable_components/src/components/inputs/inputNumber'\n"+script.string
+        # if len(script.findAll(text="import InputNumber"))==0:
+        #     script.string = "import InputNumber from '@eturnity/eturnity_reusable_components/src/components/inputs/inputNumber'\n"+script.string
 
         return soup
 
-def handleSharedInputNumber() :
+def testParser() :
     with open("./testParser.vue", 'r') as f:
         contents = f.read()
         soup = BeautifulSoup(contents, 'html.parser')
-        
+        soup = changeElement(soup)
         content=str(soup)
         createFile(content,'./testParser2.vue')
 
-handleSharedInputNumber()
+testParser()
