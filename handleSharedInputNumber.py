@@ -13,7 +13,6 @@ def printAttr(elements):
     return attrList
 
 def changeElement(soup):
-        # return soup
         elements=soup.findAll('input-number')
         
         for element in elements :
@@ -139,7 +138,7 @@ def handleSharedInputNumber() :
                     soup = BeautifulSoup(contents, 'html.parser')
                     elements=soup.findAll('input-number')
                     attrList=attrList+printAttr(elements)
-                    soup=changeElement(soup)
+                    #soup=changeElement(soup)
                     if len(elements)>0:
                         content=str(soup)
                         createFile(content,filePath)

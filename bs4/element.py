@@ -737,6 +737,9 @@ class Doctype(PreformattedString):
     PREFIX = u'<!DOCTYPE '
     SUFFIX = u'>\n'
 
+def sorter(elem):
+    print(elem[1])
+    return elem[1]['index']
 
 class Tag(PageElement):
 
@@ -1020,8 +1023,12 @@ class Tag(PageElement):
 
         attrs = []
         if self.attrs:
-            for key, val in sorted(self.attrs.items()):
-                # val=["value"]
+            print("As it is",self.attrs.items())
+            print("sorted",sorted(self.attrs.items(),key=sorter))
+                
+            for key, indexedVal in sorted(self.attrs.items(),key=sorter):
+                
+                val=indexedVal["value"]
                 if val is None:
                     decoded = key
                 else:

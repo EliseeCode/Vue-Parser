@@ -5,4 +5,4 @@
         <div v-else handleBarH="23" A="1" C="2" B="3">boom
         </div>
     </div>
-</template>>
+</template>
