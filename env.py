@@ -1,0 +1,1 @@
+rootFolder = '/home/elisee/Bureau/code/eturnity_expert/src'
